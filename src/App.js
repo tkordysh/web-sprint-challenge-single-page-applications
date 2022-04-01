@@ -10,7 +10,7 @@ const App = () => {
       <header>
         <Link to="/">Home</Link>
         <br />
-        <Link to="/pizza">Pizza</Link>
+        <Link to="/pizza" id="order-pizza">Pizza</Link>
       </header>
       <Switch>
         <Route exact path="/">
