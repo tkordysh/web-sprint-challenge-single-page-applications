@@ -5,6 +5,18 @@ import OrderForm from './components/OrderForm';
 
 
 const App = () => {
+
+
+  const [orders, setOrders] = useState([]);
+
+  const orderSubmit = (newOrder) => {
+    setOrders([...orders, newOrder])
+  }
+
+  useEffect(() => {
+    console.log(orders)
+  }, [orders])
+
   return (
     <div className='App'>
       <header>
@@ -18,7 +30,7 @@ const App = () => {
           <p>Welcome to the most delicious pizza place!</p>
         </Route>
         <Route exact path="/pizza">
-          <OrderForm />
+          <OrderForm orderSubmit={orderSubmit}/>
         </Route>
       </Switch> 
 
