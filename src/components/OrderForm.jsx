@@ -19,24 +19,48 @@ const initialForm = {
 
 const OrderForm = (props) => {
 
+    const [error, setError] = useState({
+        name: "",
+        size: "",
+        cheese: "",
+        sausage: "",
+        peppers: "",
+        pineapple: "",
+        instructions: ""
+    })
+
+    const formSchema = yup.object().shape({
+        name: yup.string().min(2, "name must be at least 2 characters").required(),
+        size: yup.string().required(),
+        cheese: yup.bool().oneOf([true]),
+        sausage: yup.bool().oneOf([true]),
+        peppers: yup.bool().oneOf([true]),
+        pineapple: yup.bool().oneOf([true]),
+        instructions: yup.string()
+    })
+   
+    const formValidate = (e) => {
+        yup.reach(formSchema, e.target.name)
+            .validate(
+                e.target.type === "checkbox" ? e.target.checked : e.target.value
+            )
+            .then(() => {
+                //passed validation
+                setError({...error, [e.target.name]: ""})
+            })
+            .catch((error) => {
+                //failed validation
+                setError({...error, [e.target.name]: error.errors[0]})
+            })
+    }
+   
+   
     const { orderSubmit } = props
-    
-    // const formSchema = yup.object().shape({
-    //     name: yup.string().min(2, "name must be at least 2 characters"),
-    //     size: "",
-    //     cheese: false,
-    //     sausage: false,
-    //     peppers: false,
-    //     pineapple: false,
-    //     instructions: "string"
-    // })
-    
     
     const [form, setForm] = useState(initialForm);
 
-
     const formChange = (e) => {
-        // console.log(e.target.name, e.target.value, e.target.checked);
+        formValidate(e)
         const valueToUse = e.target.type === "checkbox" ? e.target.checked : e.target.value
         setForm({...form, [e.target.name]: valueToUse})
     } 
@@ -92,6 +116,7 @@ const OrderForm = (props) => {
                 <br />
                 <button type="submit" id="order-button">Add to Order</button>
             </form>
+            <p>{error.name}</p>
         </article>
     )
 }
